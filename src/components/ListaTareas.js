@@ -1,6 +1,7 @@
 import React,{Fragment,useState} from 'react';
 
 const ListaTareas=({empleado,eliminarTarea,cfinalizada})=>{
+
 	return(
 		<div>
 		<h1>Forms</h1>
@@ -12,7 +13,7 @@ const ListaTareas=({empleado,eliminarTarea,cfinalizada})=>{
     			<p className="card-text">Salario: {empleado.salario}</p>
     			<p className="card-text">Sexo: {empleado.sexo}</p>
     			<a href="#" className="btn btn-primary m-2">Editar</a>
-    			<a href="#" className="btn btn-outline-warning" onClick={()=>eliminarTarea(empleado.id)}>Eliminar</a>
+    			<a href="#" className="btn btn-outline-warning" onClick={()=>eliminarTarea(empleado.clave)}>Eliminar</a>
   			</div>
 		</div>	
 		</div>

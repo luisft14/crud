@@ -15,7 +15,7 @@ import { collection, getDocs,addDoc } from "firebase/firestore";
    },
     {
     id:2,
-    clave:'12',
+    clave:'1123',
     nombre:'luis',
     edad:'23',
     salario:'15,000',
@@ -31,8 +31,8 @@ function App() {
 
 
   const eliminarTarea=(idTarea)=>{
-    const arrayActualizado=objetosLista.filter(objetoTarea=>objetoTarea.id !==idTarea);
-    setObjetosLista(arrayActualizado);
+    const arrayActualizado=empleados.filter(empleado=>empleado.clave !==idTarea);
+    setEmpleados(arrayActualizado);
   }
   const cfinalizada =(idTarea)=>{
     
@@ -75,7 +75,7 @@ function App() {
           (
           <ListaTareas empleado={empleado} 
           key={empleado.id}
-         // eliminarTarea={eliminarTarea}
+          eliminarTarea={eliminarTarea}
           //cfinalizada={cfinalizada}
           />
           )
