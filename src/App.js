@@ -4,9 +4,8 @@ import ListaTareas from './components/ListaTareas';
 import Formulario from './components/Formulario';
 import db from './ConfigFirebase';
 import { collection, getDocs,addDoc } from "firebase/firestore";
- const ArrayListaTarea =[
+ const arrayListaTarea =[
    {
-    id:1,
     clave:'12',
     nombre:'vaca',
     edad:'42',
@@ -14,7 +13,6 @@ import { collection, getDocs,addDoc } from "firebase/firestore";
     sexo:'disque hombre'
    },
     {
-    id:2,
     clave:'1123',
     nombre:'luis',
     edad:'23',
@@ -25,8 +23,10 @@ import { collection, getDocs,addDoc } from "firebase/firestore";
 
 function App() {
 
-  const [objetosLista,setObjetosLista]=useState(ArrayListaTarea);
-  const[empleados,setEmpleados]=useState(ArrayListaTarea);
+  //const [objetosLista,setObjetosLista]=useState(ArrayListaTarea);
+  const [empleados,setEmpleados]=useState(arrayListaTarea);
+  //const [editarEmpleado,setEditarEmpleado]=useState(null);
+  const [editarEmpleado,setEditarEmpleado]=useState(null);
 
 
 
@@ -34,20 +34,7 @@ function App() {
     const arrayActualizado=empleados.filter(empleado=>empleado.clave !==idTarea);
     setEmpleados(arrayActualizado);
   }
-  const cfinalizada =(idTarea)=>{
-    
-    const cambiarEstado=objetosLista.map(objTarea=>{
-      const copia={
-        ...objTarea,finalizada:!objTarea.finalizada
-      }
-      if (objTarea.id===idTarea) {
-        return copia
-      }else{
-        return objTarea
-      }
-    });
-    setObjetosLista(cambiarEstado);
-  }
+
 
   const agregarAlista=(objEmpleado)=>{
 
@@ -64,19 +51,38 @@ function App() {
     setEmpleados(nuevaLista);
   }
 
+ // const actualizarRegistro=(edtempleados)=>{
+   // const cambioEmpleados = empleados.map(empleado=>(
+     // empleado.clave === edtempleados.clave
+      //?edtempleados
+      //:empleados
+    //));
+    //setEmpleados(cambioEmpleados);
+  //}
+  const actualizarRegistro=(edtempleados)=>{
+    const cambioEmpleado=empleados.map(empleado=>(
+      empleado.clave===edtempleados.clave
+      ?edtempleados
+      :empleado
+     
+    ));
+     setEmpleados(cambioEmpleado);
+  }
+
   return (
     <Fragment>
     <div className="App">
     <div className="row">
     <div id="listaTarea" className="col-8">
-      Lista Tareas
+      Lista Empleados
       {
         empleados.map(empleado=>
           (
           <ListaTareas empleado={empleado} 
-          key={empleado.id}
+          key={empleado.clave}
           eliminarTarea={eliminarTarea}
-          //cfinalizada={cfinalizada}
+          //setEditarEmpleado={setEditarEmpleado}
+          setEditarEmpleado={setEditarEmpleado}
           />
           )
         )
@@ -84,7 +90,11 @@ function App() {
     </div>
     <div id="formulario" className="col-4">
       Formulario
-      <Formulario agregarAlista={agregarAlista}/>
+      <Formulario 
+        agregarAlista={agregarAlista}
+        editarEmpleado={editarEmpleado}
+        actualizarRegistro={actualizarRegistro}
+      />
     </div>    
     </div>
 

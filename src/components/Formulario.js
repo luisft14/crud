@@ -1,21 +1,45 @@
-import React,{Fragment,useState} from 'react';
+import React,{Fragment,useState,useEffect} from 'react';
 
 const valoresI={
 	clave:"",
 	nombre:"",
 	salario:"",
-	sexo:""
+	sexo:"",
+	archivo:""
 }
-const ListaTareas=({agregarAlista})=>{
+const ListaTareas=({agregarAlista,editarEmpleado,actualizarRegistro})=>{
+	
 	const [valoresFormulario,setValoresFormulario]=useState(valoresI);
-	const {clave,nombre,salario,sexo}=valoresFormulario;
+	const {clave,nombre,salario,sexo,archivo}=valoresFormulario;
 	const [error,setError]=useState(null);
 
-	const cambioFormulario=(e)=>{
-		const cambio={
-			...valoresFormulario,
-			[e.target.name]:e.target.value
+	useEffect(()=>{
+		if (editarEmpleado) {
+			setValoresFormulario(editarEmpleado);
 		}
+		
+	},[editarEmpleado]);
+
+	const cambioFormulario=(e)=>{
+		var cambio={};
+		
+		if (e.target.type==="file") {
+			console.log("soy archivo");
+			var url=URL.createObjectURL(e.target.files[0]);
+
+			 cambio={
+				...valoresFormulario,
+				[e.target.name]:e.target.value,
+				archivo:URL.createObjectURL(e.target.files[0])
+			}
+		}else{
+		
+			 cambio={
+				...valoresFormulario,
+				[e.target.name]:e.target.value
+			}			
+		}
+		console.log();
 		setValoresFormulario(cambio);
 	}
 
@@ -39,7 +63,17 @@ const ListaTareas=({agregarAlista})=>{
 			return
 		}
 		//agregarTarea
-		agregarAlista(valoresFormulario);
+		if (editarEmpleado) {
+			console.log("actualizando");
+			actualizarRegistro(valoresFormulario);
+			
+		}
+		else{
+			console.log("agregando");
+			agregarAlista(valoresFormulario);
+		}
+		setValoresFormulario(valoresI);
+		
 		setError(null);
 	}
 
@@ -76,7 +110,14 @@ const ListaTareas=({agregarAlista})=>{
 			</input>
 			<input onChange={cambioFormulario} className="form-check-input" type="radio" value="Hombre" name="sexo" /> Hombre
         	<input onChange={cambioFormulario} className="form-check-input" type="radio" value="Mujer" name="sexo" /> Mujer
-        	<input onChange={cambioFormulario} className="form-check-input" type="radio" value="Aldaira" name="sexo" /> Aldaira
+        	<input 
+				type="file"  
+				className="form-control mt-3 "
+				name="archivo"
+				onChange={cambioFormulario}
+			>
+			</input>
+			<img src={archivo}height="150" width="150"/>
 			<button className="btn btn-primary d-md-block mt-2">Agregar Tarea</button>
 			</form>
 			{
