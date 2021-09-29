@@ -4,22 +4,7 @@ import ListaTareas from './components/ListaTareas';
 import Formulario from './components/Formulario';
 import db from './ConfigFirebase';
 import { collection, getDocs,addDoc } from "firebase/firestore";
- const arrayListaTarea =[
-   {
-    clave:'12',
-    nombre:'vaca',
-    edad:'42',
-    salario:'15,000',
-    sexo:'disque hombre'
-   },
-    {
-    clave:'1123',
-    nombre:'luis',
-    edad:'23',
-    salario:'15,000',
-    sexo:'hombre'
-   }
- ];
+const arrayListaTarea =[];
 
 function App() {
 
@@ -27,6 +12,7 @@ function App() {
   const [empleados,setEmpleados]=useState(arrayListaTarea);
   //const [editarEmpleado,setEditarEmpleado]=useState(null);
   const [editarEmpleado,setEditarEmpleado]=useState(null);
+  const[cambiarEstado,setCambiarEstado]=useState(null);
 
 
 
@@ -37,20 +23,54 @@ function App() {
 
 
   const agregarAlista=(objEmpleado)=>{
+    console.log("archivo");
+    console.log(objEmpleado.archivo);
+    var url=objEmpleado.archivo;
 
-    
-
-      const nuevoEmpleado={
-        ...objEmpleado,
-      }
-      const nuevaLista=[
-      ...empleados,nuevoEmpleado
-      ]
+        const agregarDatos=async()=>{
+      console.log("entro al metodoo agregar");
+      const datos= await addDoc(collection(db,'empleados'),{
+        clave:objEmpleado.clave,
+        foto:url,
+        nombre:objEmpleado.nombre,
+        salario:objEmpleado.salario,
+        sexo:objEmpleado.sexo
+      });
+      
+    }
+    agregarDatos();
+    setCambiarEstado({true:true});
+      //const nuevoEmpleado={
+      //  ...objEmpleado,
+      //}
+      //const nuevaLista=[
+      //...empleados,nuevoEmpleado
+      //]
 
   
-    setEmpleados(nuevaLista);
+    //setEmpleados(nuevaLista);
   }
+  const arregloVacio=[];
+  useEffect(()=>{
+    console.log("se ejecuto el efecto");
+    const obtenerDatos=async()=>{
+      const datos= await getDocs(collection(db,'empleados'));
+       const arregloDatos=[];
+      datos.forEach((documento)=>{
+          arregloDatos.push({
+          id:documento.id,...documento.data()
+        });
 
+        console.log("documento");
+      });
+      setEmpleados(arregloVacio);
+      setEmpleados(arregloDatos);
+      
+      
+    }
+    obtenerDatos();
+
+  },[cambiarEstado]);
  // const actualizarRegistro=(edtempleados)=>{
    // const cambioEmpleados = empleados.map(empleado=>(
      // empleado.clave === edtempleados.clave
@@ -90,7 +110,7 @@ function App() {
     </div>
     <div id="formulario" className="col-4">
       Formulario
-      <Formulario 
+      <Formulario
         agregarAlista={agregarAlista}
         editarEmpleado={editarEmpleado}
         actualizarRegistro={actualizarRegistro}

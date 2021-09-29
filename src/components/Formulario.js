@@ -20,6 +20,8 @@ const ListaTareas=({agregarAlista,editarEmpleado,actualizarRegistro})=>{
 		
 	},[editarEmpleado]);
 
+	
+
 	const cambioFormulario=(e)=>{
 		var cambio={};
 		
